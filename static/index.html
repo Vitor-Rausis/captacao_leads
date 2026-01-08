@@ -29,9 +29,37 @@
             margin-bottom: 30px;
         }
 
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
 
         .card {
@@ -213,7 +241,12 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📋 Fernando Leads</h1>
+            <div class="logo-container">
+                <img src="/static/logo.png" alt="Fernando Leads Logo" class="logo" onerror="this.style.display='none'">
+            </div>
+            <h1>
+                <span>Fernando Leads</span>
+            </h1>
             <p>Sistema de Captação de Leads</p>
         </div>
 
