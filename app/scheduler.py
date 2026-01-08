@@ -162,14 +162,22 @@ def verificar_mensagens_pendentes():
 def iniciar_scheduler():
     """Inicia o scheduler e verifica mensagens pendentes"""
     if not scheduler.running:
-        scheduler.start()
-        # Verifica mensagens pendentes a cada hora
-        scheduler.add_job(
-            verificar_mensagens_pendentes,
-            trigger='interval',
-            hours=1,
-            id='verificar_pendentes'
-        )
-        # Executa uma verificação imediata
-        verificar_mensagens_pendentes()
+        try:
+            scheduler.start()
+            # Verifica mensagens pendentes a cada hora
+            scheduler.add_job(
+                verificar_mensagens_pendentes,
+                trigger='interval',
+                hours=1,
+                id='verificar_pendentes'
+            )
+            # Executa uma verificação imediata
+            verificar_mensagens_pendentes()
+            print("   ✅ Mensagens automáticas configuradas:")
+            print("      • 3 dias após cadastro")
+            print("      • 7 dias após cadastro")
+            print("      • 10 meses após cadastro")
+        except Exception as e:
+            print(f"   ⚠️  Erro ao iniciar scheduler: {e}")
+            raise
 

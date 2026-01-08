@@ -18,12 +18,31 @@ app = FastAPI(title="Fernando Leads - Sistema de Captação de Leads")
 # Inicializa o banco de dados
 init_db()
 
+# Mostra informações de configuração na inicialização
+from app.database import DB_TYPE, IS_SQLITE, IS_POSTGRESQL
+from app.whatsapp import USE_TWILIO
+
+print("\n" + "="*70)
+print("🚀 FERNANDO LEADS - Sistema Iniciado")
+print("="*70)
+print(f"📊 Banco de Dados: {DB_TYPE}")
+if IS_SQLITE:
+    print("   ⚠️  SQLite detectado - adequado para desenvolvimento")
+    print("   💡 Para produção, configure PostgreSQL via variável DATABASE_URL")
+elif IS_POSTGRESQL:
+    print("   ✅ PostgreSQL detectado - pronto para produção")
+print(f"📱 WhatsApp: {'✅ Twilio Configurado' if USE_TWILIO else '⚠️  Modo Desenvolvimento (mensagens apenas logadas)'}")
+if not USE_TWILIO:
+    print("   💡 Para envios reais, configure variáveis: USE_TWILIO, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN")
+print("="*70 + "\n")
+
 # Inicia o scheduler (em thread separada para não bloquear)
 try:
     iniciar_scheduler()
+    print("✅ Scheduler de mensagens automáticas iniciado")
 except Exception as e:
-    print(f"Aviso: Erro ao iniciar scheduler: {e}")
-    print("O servidor continuará rodando, mas mensagens automáticas podem não funcionar.")
+    print(f"⚠️  Aviso: Erro ao iniciar scheduler: {e}")
+    print("   O servidor continuará rodando, mas mensagens automáticas podem não funcionar.")
 
 # Monta arquivos estáticos
 app.mount("/static", StaticFiles(directory="static"), name="static")

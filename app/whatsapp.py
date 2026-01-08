@@ -57,9 +57,10 @@ def enviar_mensagem_whatsapp(telefone: str, mensagem: str) -> dict:
             }
     else:
         # Modo de desenvolvimento - apenas loga a mensagem
-        print(f"[MODO DESENVOLVIMENTO] Mensagem para {telefone_formatado}:")
-        print(f"{mensagem}")
-        print("-" * 50)
+        print(f"\n[MODO DESENVOLVIMENTO - WhatsApp não configurado]")
+        print(f"📱 Para: {telefone_formatado}")
+        print(f"💬 Mensagem: {mensagem}")
+        print(f"{'='*60}\n")
         return {
             "status": "enviada",
             "message_sid": "dev_mode",
