@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fernando Leads - Sistema de Captação de Leads</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .leads-table th,
+        .leads-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .leads-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .leads-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .historico-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .historico-item h4 {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .historico-item p {
+            color: #666;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Fernando Leads</h1>
+            <p>Sistema de Captação de Leads</p>
+        </div>
+
+        <div class="card">
+            <h2>Adicionar Novo Lead</h2>
+            <div id="alert-container"></div>
+            <form id="lead-form">
+                <div class="form-group">
+                    <label for="nome">Nome *</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefone">Telefone (WhatsApp) *</label>
+                    <input type="text" id="telefone" name="telefone" placeholder="(11) 99999-9999" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email">
+                </div>
+                <div class="form-group">
+                    <label for="observacoes">Observações</label>
+                    <textarea id="observacoes" name="observacoes" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn">Adicionar Lead</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Leads Cadastrados</h2>
+            <div id="leads-container">
+                <p>Carregando leads...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Histórico -->
+    <div id="historico-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Histórico de Mensagens</h2>
+            <div id="historico-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api';
+
+        // Formatação de telefone
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                if (value.length <= 10) {
+                    value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+                } else {
+                    value = value.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+                }
+            }
+            e.target.value = value;
+        });
+
+        // Submissão do formulário
+        document.getElementById('lead-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                nome: document.getElementById('nome').value,
+                telefone: document.getElementById('telefone').value.replace(/\D/g, ''),
+                email: document.getElementById('email').value || null,
+                observacoes: document.getElementById('observacoes').value || null
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/leads`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    showAlert('Lead adicionado com sucesso!', 'success');
+                    document.getElementById('lead-form').reset();
+                    carregarLeads();
+                } else {
+                    const error = await response.json();
+                    showAlert(error.detail || 'Erro ao adicionar lead', 'error');
+                }
+            } catch (error) {
+                showAlert('Erro ao conectar com o servidor', 'error');
+            }
+        });
+
+        // Carregar leads
+        async function carregarLeads() {
+            try {
+                const response = await fetch(`${API_URL}/leads`);
+                const leads = await response.json();
+                
+                const container = document.getElementById('leads-container');
+                
+                if (leads.length === 0) {
+                    container.innerHTML = '<p>Nenhum lead cadastrado ainda.</p>';
+                    return;
+                }
+
+                let html = `
+                    <table class="leads-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Telefone</th>
+                                <th>E-mail</th>
+                                <th>Data Cadastro</th>
+                                <th>Status Mensagens</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                leads.forEach(lead => {
+                    const dataCadastro = new Date(lead.data_cadastro).toLocaleDateString('pt-BR');
+                    const status3d = lead.mensagem_3_dias_enviada ? 
+                        '<span class="badge badge-success">✓ 3 dias</span>' : 
+                        '<span class="badge badge-pending">⏳ 3 dias</span>';
+                    const status7d = lead.mensagem_7_dias_enviada ? 
+                        '<span class="badge badge-success">✓ 7 dias</span>' : 
+                        '<span class="badge badge-pending">⏳ 7 dias</span>';
+                    const status10m = lead.mensagem_10_meses_enviada ? 
+                        '<span class="badge badge-success">✓ 10 meses</span>' : 
+                        '<span class="badge badge-pending">⏳ 10 meses</span>';
+
+                    html += `
+                        <tr>
+                            <td>${lead.nome}</td>
+                            <td>${lead.telefone}</td>
+                            <td>${lead.email || '-'}</td>
+                            <td>${dataCadastro}</td>
+                            <td>${status3d} ${status7d} ${status10m}</td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="verHistorico(${lead.id})">Histórico</button>
+                                <button class="btn btn-danger" onclick="desativarLead(${lead.id})">Desativar</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table>';
+                container.innerHTML = html;
+            } catch (error) {
+                document.getElementById('leads-container').innerHTML = 
+                    '<p class="alert alert-error">Erro ao carregar leads</p>';
+            }
+        }
+
+        // Ver histórico
+        async function verHistorico(leadId) {
+            try {
+                const response = await fetch(`${API_URL}/leads/${leadId}/historico`);
+                const historico = await response.json();
+                
+                const content = document.getElementById('historico-content');
+                
+                if (historico.length === 0) {
+                    content.innerHTML = '<p>Nenhuma mensagem enviada ainda.</p>';
+                } else {
+                    let html = '';
+                    historico.forEach(item => {
+                        const data = new Date(item.data_envio).toLocaleString('pt-BR');
+                        const statusClass = item.status === 'enviada' ? 'badge-success' : 'badge-pending';
+                        html += `
+                            <div class="historico-item">
+                                <h4>Tipo: ${item.tipo_mensagem.replace('_', ' ').toUpperCase()}</h4>
+                                <p><strong>Data:</strong> ${data}</p>
+                                <p><strong>Status:</strong> <span class="badge ${statusClass}">${item.status}</span></p>
+                                <p><strong>Mensagem:</strong> ${item.mensagem}</p>
+                                ${item.erro ? `<p><strong>Erro:</strong> ${item.erro}</p>` : ''}
+                            </div>
+                        `;
+                    });
+                    content.innerHTML = html;
+                }
+                
+                document.getElementById('historico-modal').style.display = 'block';
+            } catch (error) {
+                alert('Erro ao carregar histórico');
+            }
+        }
+
+        // Desativar lead
+        async function desativarLead(leadId) {
+            if (!confirm('Tem certeza que deseja desativar este lead?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/leads/${leadId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('Lead desativado com sucesso!', 'success');
+                    carregarLeads();
+                } else {
+                    showAlert('Erro ao desativar lead', 'error');
+                }
+            } catch (error) {
+                showAlert('Erro ao conectar com o servidor', 'error');
+            }
+        }
+
+        // Fechar modal
+        document.querySelector('.close').addEventListener('click', function() {
+            document.getElementById('historico-modal').style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('historico-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Mostrar alerta
+        function showAlert(message, type) {
+            const container = document.getElementById('alert-container');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            container.innerHTML = '';
+            container.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // Carregar leads ao iniciar
+        carregarLeads();
+        
+        // Atualizar a cada 30 segundos
+        setInterval(carregarLeads, 30000);
+    </script>
+</body>
+</html>
+
