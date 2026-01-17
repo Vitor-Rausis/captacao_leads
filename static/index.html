@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fernando Leads - Sistema de Captação de Leads</title>
+    <title>Fernando Leads - Gestão de Leads e Follow-up</title>
     <style>
         * {
             margin: 0;
@@ -12,8 +12,8 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
             min-height: 100vh;
             padding: 20px;
         }
@@ -25,8 +25,9 @@
 
         .header {
             text-align: center;
-            color: white;
-            margin-bottom: 30px;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            padding: 20px 0;
         }
 
         .logo-container {
@@ -37,37 +38,39 @@
         }
 
         .logo {
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             object-fit: contain;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
+            margin-bottom: 15px;
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #1a252f;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            color: #6c757d;
+            font-size: 1.1em;
         }
 
         .card {
             background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+        }
+
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+            font-weight: 600;
         }
 
         .form-group {
@@ -94,36 +97,49 @@
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
         }
 
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2c3e50;
             color: white;
-            padding: 12px 30px;
+            padding: 12px 28px;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: background-color 0.2s, box-shadow 0.2s;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: #34495e;
+            box-shadow: 0 2px 6px rgba(44, 62, 80, 0.2);
         }
 
         .btn:active {
-            transform: translateY(0);
+            background: #1a252f;
         }
 
         .btn-secondary {
             background: #6c757d;
+            padding: 8px 20px;
+            font-size: 14px;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
         }
 
         .btn-danger {
-            background: #dc3545;
+            background: #e74c3c;
+            padding: 8px 20px;
+            font-size: 14px;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
         }
 
         .leads-table {
@@ -222,7 +238,7 @@
         .historico-item {
             padding: 15px;
             margin-bottom: 10px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #2c3e50;
             background: #f8f9fa;
             border-radius: 4px;
         }
@@ -242,16 +258,14 @@
     <div class="container">
         <div class="header">
             <div class="logo-container">
-                <img src="/static/logo.png" alt="Fernando Leads Logo" class="logo" onerror="this.style.display='none'">
+                <img src="/static/Logo.png" alt="Fernando Leads Logo" class="logo" onerror="this.style.display='none'">
             </div>
-            <h1>
-                <span>Fernando Leads</span>
-            </h1>
-            <p>Sistema de Captação de Leads</p>
+            <h1>Fernando Leads</h1>
+            <p>Gestão de Leads e Follow-up Automatizado</p>
         </div>
 
         <div class="card">
-            <h2>Adicionar Novo Lead</h2>
+            <h2>Cadastrar Novo Lead</h2>
             <div id="alert-container"></div>
             <form id="lead-form">
                 <div class="form-group">
